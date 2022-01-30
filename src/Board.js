@@ -15,13 +15,20 @@ export class Board extends React.Component {
         return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)} />;
     }
     handleClick(i) {
-        const squares = this.state.squares.slice()
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({ squares: squares,
-                        xIsNext: !this.state.xIsNext });
+        const squares = this.state.squares.slice();
+        if (squares[i] === null) {
+            // return;
+            squares[i] = this.state.xIsNext ? 'X' : 'O';
+            this.setState({
+                squares: squares,
+                xIsNext: !this.state.xIsNext
+            });
+        }
+
+
     }
     render() {
-        const status = `Next player: ${this.state.xIsNext?'X':'O'}`;
+        const status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
 
         return (
             <div>
