@@ -1,12 +1,14 @@
 import { Square } from "./Square";
 import React from "react";
+import { Game } from "./Game";
 
 export class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             squares: Array(9).fill(null),
-            xIsNext: true
+            xIsNext: true,
+            winner: null
         };
     }
     renderSquare(i) {
@@ -15,13 +17,25 @@ export class Board extends React.Component {
         return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)} />;
     }
     handleClick(i) {
-        const squares = this.state.squares.slice()
+        const squares = this.state.squares.slice();
+        if (squares[i] || Game.calculateWinner(squares)) {
+            return;
+        }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({ squares: squares,
-                        xIsNext: !this.state.xIsNext });
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext
+        });
+
     }
     render() {
-        const status = `Next player: ${this.state.xIsNext?'X':'O'}`;
+        let winner = Game.calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+            status = 'Winner:   ' + winner;
+        } else {
+            status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
+        }
 
         return (
             <div>
